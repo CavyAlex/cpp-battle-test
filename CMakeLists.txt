@@ -29,5 +29,8 @@ endforeach()
 file(GLOB_RECURSE UNIT_TEST_SOURCES CONFIGURE_DEPENDS tests/*.cpp tests/*.hpp)
 add_executable(unit_tests ${UNIT_TEST_SOURCES})
 target_include_directories(unit_tests PRIVATE tests/)
+# Тесты задают только нужные поля StubOptions, остальные намеренно берутся по умолчанию;
+# начиная с clang 18 -Wextra предупреждает о таком в именованных инициализаторах
+target_compile_options(unit_tests PRIVATE -Wno-missing-field-initializers)
 target_link_libraries(unit_tests PRIVATE sw_battle)
 add_test(NAME unit_tests COMMAND unit_tests)
