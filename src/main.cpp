@@ -1,11 +1,8 @@
 #include <Core/Simulation.hpp>
 #include <Core/World.hpp>
-#include <Features/Units/Hunter.hpp>
-#include <Features/Units/Swordsman.hpp>
+#include <Features/Units/Registration.hpp>
 #include <IO/Commands/CreateMap.hpp>
 #include <IO/Commands/March.hpp>
-#include <IO/Commands/SpawnHunter.hpp>
-#include <IO/Commands/SpawnSwordsman.hpp>
 #include <IO/System/CommandParser.hpp>
 #include <IO/System/EventLog.hpp>
 #include <charconv>
@@ -13,7 +10,6 @@
 #include <exception>
 #include <fstream>
 #include <iostream>
-#include <memory>
 #include <random>
 #include <stdexcept>
 #include <string>
@@ -69,9 +65,8 @@ namespace
 
 		io::CommandParser parser;
 		parser.add<io::CreateMap>([&](auto command) { world.createMap(command.width, command.height); })
-			.add<io::March>([&](auto command) { world.march(command.unitId, {command.targetX, command.targetY}); })
-			.add<io::SpawnSwordsman>([&](auto command) { world.spawn(std::make_unique<features::Swordsman>(command)); })
-			.add<io::SpawnHunter>([&](auto command) { world.spawn(std::make_unique<features::Hunter>(command)); });
+			.add<io::March>([&](auto command) { world.march(command.unitId, {command.targetX, command.targetY}); });
+		features::registerUnits(parser, world);
 
 		parser.parse(file);
 		// «CREATE_MAP — эта команда начинает любой сценарий»: пустой сценарий — ошибка, а не пустой лог
