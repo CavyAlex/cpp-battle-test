@@ -1,0 +1,4 @@
+CREATE_MAP 5 5
+SPAWN_HUNTER 1 0 0 10 5 1 1
+
+// EXPECT-ERROR: Hunter 1: range must be at least 2

@@ -1,0 +1,4 @@
+CREATE_MAP 5 5
+MARCH 7 1 1
+
+// EXPECT-ERROR: Unknown unit id: 7

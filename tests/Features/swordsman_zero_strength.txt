@@ -1,0 +1,4 @@
+CREATE_MAP 5 5
+SPAWN_SWORDSMAN 1 0 0 10 0
+
+// EXPECT-ERROR: Swordsman 1: strength must be positive

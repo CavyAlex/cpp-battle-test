@@ -1,0 +1,5 @@
+CREATE_MAP 5 5
+SPAWN_SWORDSMAN 1 0 0 10 2
+
+// EXPECT: [1] MAP_CREATED width=5 height=5
+// EXPECT: [1] UNIT_SPAWNED unitId=1 unitType=Swordsman x=0 y=0

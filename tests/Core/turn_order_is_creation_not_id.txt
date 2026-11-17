@@ -1,0 +1,11 @@
+// Юнит 5 создан раньше юнита 2 и ходит первым
+CREATE_MAP 5 5
+SPAWN_SWORDSMAN 5 1 0 5 5
+SPAWN_SWORDSMAN 2 0 0 5 3
+
+// EXPECT: [1] MAP_CREATED width=5 height=5
+// EXPECT: [1] UNIT_SPAWNED unitId=5 unitType=Swordsman x=1 y=0
+// EXPECT: [1] UNIT_SPAWNED unitId=2 unitType=Swordsman x=0 y=0
+// EXPECT: [2] UNIT_ATTACKED attackerUnitId=5 targetUnitId=2 damage=5 targetHp=0
+// EXPECT: [2] UNIT_DIED unitId=2
+// EXPECT: [2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=5 damage=3 targetHp=2

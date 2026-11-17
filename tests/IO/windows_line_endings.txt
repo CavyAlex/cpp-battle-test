@@ -1,0 +1,11 @@
+CREATE_MAP 5 5
+SPAWN_SWORDSMAN 1 0 0 10 2
+SPAWN_SWORDSMAN 2 4 4 10 2
+MARCH 1 1 0
+
+// EXPECT: [1] MAP_CREATED width=5 height=5
+// EXPECT: [1] UNIT_SPAWNED unitId=1 unitType=Swordsman x=0 y=0
+// EXPECT: [1] UNIT_SPAWNED unitId=2 unitType=Swordsman x=4 y=4
+// EXPECT: [1] MARCH_STARTED unitId=1 x=0 y=0 targetX=1 targetY=0
+// EXPECT: [2] UNIT_MOVED unitId=1 x=1 y=0
+// EXPECT: [2] MARCH_ENDED unitId=1 x=1 y=0

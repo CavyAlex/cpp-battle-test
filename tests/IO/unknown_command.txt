@@ -1,0 +1,4 @@
+CREATE_MAP 5 5
+SPAWN_MINE 1 0 0 5
+
+// EXPECT-ERROR: Unknown command: SPAWN_MINE

@@ -1,0 +1,4 @@
+CREATE_MAP 5 5
+CREATE_MAP 5 5
+
+// EXPECT-ERROR: Map is already created

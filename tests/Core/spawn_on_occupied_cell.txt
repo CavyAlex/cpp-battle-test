@@ -1,0 +1,5 @@
+CREATE_MAP 5 5
+SPAWN_SWORDSMAN 1 0 0 10 2
+SPAWN_HUNTER 2 0 0 10 5 1 4
+
+// EXPECT-ERROR: Cannot spawn unit 2: cell is occupied

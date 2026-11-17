@@ -1,0 +1,3 @@
+// Пустой файл сценария: команды берутся из пустого empty_file.in
+// INPUT: empty_file.in
+// EXPECT-ERROR: Scenario has no CREATE_MAP

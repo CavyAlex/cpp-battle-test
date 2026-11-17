@@ -1,0 +1,4 @@
+SPAWN_SWORDSMAN 1 0 0 10 2
+CREATE_MAP 5 5
+
+// EXPECT-ERROR: Map is not created

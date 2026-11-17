@@ -1,0 +1,5 @@
+// Сценарий из одних комментариев и пустых строк
+
+// CREATE_MAP 10 10
+
+// EXPECT-ERROR: Scenario has no CREATE_MAP

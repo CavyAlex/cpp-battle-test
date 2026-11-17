@@ -1,0 +1,15 @@
+CREATE_MAP 10 10
+SPAWN_HUNTER 1 0 0 10 5 10 4
+SPAWN_SWORDSMAN 2 1 0 10 1
+SPAWN_SWORDSMAN 3 3 0 10 1
+
+// EXPECT: [1] MAP_CREATED width=10 height=10
+// EXPECT: [1] UNIT_SPAWNED unitId=1 unitType=Hunter x=0 y=0
+// EXPECT: [1] UNIT_SPAWNED unitId=2 unitType=Swordsman x=1 y=0
+// EXPECT: [1] UNIT_SPAWNED unitId=3 unitType=Swordsman x=3 y=0
+// EXPECT: [2] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=10 targetHp=0
+// EXPECT: [2] UNIT_DIED unitId=2
+// EXPECT: [2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=9
+// EXPECT: [3] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=5 targetHp=5
+// EXPECT: [4] UNIT_ATTACKED attackerUnitId=1 targetUnitId=3 damage=5 targetHp=0
+// EXPECT: [4] UNIT_DIED unitId=3

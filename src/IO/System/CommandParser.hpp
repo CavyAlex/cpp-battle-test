@@ -4,7 +4,9 @@
 
 #include <functional>
 #include <sstream>
+#include <stdexcept>
 #include <string>
+#include <unordered_map>
 
 namespace sw::io
 {
@@ -23,8 +25,13 @@ namespace sw::io
 				[handler = std::move(handler)](std::istream& stream)
 				{
 					TCommandData data;
-					CommandParserVisitor visitor(stream);
+					CommandParserVisitor visitor(stream, TCommandData::Name);
 					data.visit(visitor);
+					std::string extra;
+					if (stream >> extra)
+					{
+						throw std::runtime_error(std::string(TCommandData::Name) + ": unexpected extra arguments");
+					}
 					handler(std::move(data));
 				});
 			if (!inserted)

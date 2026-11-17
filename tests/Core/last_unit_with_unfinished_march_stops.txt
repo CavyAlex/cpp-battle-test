@@ -1,0 +1,13 @@
+// Юнит 1 идёт к (9,9), но после гибели юнита 2 остаётся один — симуляция заканчивается
+CREATE_MAP 10 10
+SPAWN_SWORDSMAN 1 0 0 10 10
+SPAWN_SWORDSMAN 2 1 0 5 1
+MARCH 1 9 9
+
+// EXPECT: [1] MAP_CREATED width=10 height=10
+// EXPECT: [1] UNIT_SPAWNED unitId=1 unitType=Swordsman x=0 y=0
+// EXPECT: [1] UNIT_SPAWNED unitId=2 unitType=Swordsman x=1 y=0
+// EXPECT: [1] MARCH_STARTED unitId=1 x=0 y=0 targetX=9 targetY=9
+// EXPECT: [2] UNIT_ATTACKED attackerUnitId=1 targetUnitId=2 damage=10 targetHp=0
+// EXPECT: [2] UNIT_DIED unitId=2
+// EXPECT: [2] UNIT_ATTACKED attackerUnitId=2 targetUnitId=1 damage=1 targetHp=9

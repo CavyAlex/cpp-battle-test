@@ -1,0 +1,4 @@
+CREATE_MAP 5 5
+SPAWN_SWORDSMAN 1 0 abc 10 2
+
+// EXPECT-ERROR: SPAWN_SWORDSMAN: invalid or missing value for 'y'

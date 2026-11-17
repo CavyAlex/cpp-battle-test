@@ -1,82 +1,86 @@
+#include <Core/Simulation.hpp>
+#include <Core/World.hpp>
+#include <Features/Units/Hunter.hpp>
+#include <Features/Units/Swordsman.hpp>
 #include <IO/Commands/CreateMap.hpp>
 #include <IO/Commands/March.hpp>
 #include <IO/Commands/SpawnHunter.hpp>
 #include <IO/Commands/SpawnSwordsman.hpp>
-#include <IO/Events/MapCreated.hpp>
-#include <IO/Events/MarchEnded.hpp>
-#include <IO/Events/MarchStarted.hpp>
-#include <IO/Events/UnitAttacked.hpp>
-#include <IO/Events/UnitDied.hpp>
-#include <IO/Events/UnitMoved.hpp>
-#include <IO/Events/UnitSpawned.hpp>
 #include <IO/System/CommandParser.hpp>
 #include <IO/System/EventLog.hpp>
-#include <IO/System/PrintDebug.hpp>
+#include <cstdint>
+#include <exception>
 #include <fstream>
 #include <iostream>
+#include <memory>
+#include <random>
+#include <stdexcept>
+#include <string>
+
+namespace
+{
+	struct Options
+	{
+		std::string scenarioPath;
+		uint32_t seed{};
+	};
+
+	Options parseOptions(int argc, char** argv)
+	{
+		const std::string usage = "Usage: sw_battle_test <scenario_file> [--seed <number>]";
+		if (argc == 2)
+		{
+			return {argv[1], std::random_device{}()};
+		}
+		if (argc == 4 && std::string(argv[2]) == "--seed")
+		{
+			return {argv[1], static_cast<uint32_t>(std::stoul(argv[3]))};
+		}
+		throw std::runtime_error(usage);
+	}
+
+	void run(const Options& options)
+	{
+		using namespace sw;
+
+		std::ifstream file(options.scenarioPath);
+		if (!file)
+		{
+			throw std::runtime_error("File not found: " + options.scenarioPath);
+		}
+
+		// Индекс считаем сами, а не через std::uniform_int_distribution: так один seed даёт
+		// одинаковый результат на любой стандартной библиотеке
+		std::mt19937 engine(options.seed);
+		EventLog eventLog;
+		core::World world(eventLog, [&engine](size_t n) { return static_cast<size_t>(engine() % n); });
+
+		io::CommandParser parser;
+		parser.add<io::CreateMap>([&](auto command) { world.createMap(command.width, command.height); })
+			.add<io::March>([&](auto command) { world.march(command.unitId, {command.targetX, command.targetY}); })
+			.add<io::SpawnSwordsman>([&](auto command) { world.spawn(std::make_unique<features::Swordsman>(command)); })
+			.add<io::SpawnHunter>([&](auto command) { world.spawn(std::make_unique<features::Hunter>(command)); });
+
+		parser.parse(file);
+		// «CREATE_MAP — эта команда начинает любой сценарий»: пустой сценарий — ошибка, а не пустой лог
+		if (!world.hasMap())
+		{
+			throw std::runtime_error("Scenario has no CREATE_MAP");
+		}
+		core::runSimulation(world);
+	}
+}
 
 int main(int argc, char** argv)
 {
-	using namespace sw;
-
-	if (argc != 2)
+	try
 	{
-		throw std::runtime_error("Error: No file specified in command line argument");
+		run(parseOptions(argc, argv));
+		return 0;
 	}
-
-	std::ifstream file(argv[1]);
-	if (!file)
+	catch (const std::exception& error)
 	{
-		throw std::runtime_error("Error: File not found - " + std::string(argv[1]));
+		std::cerr << "Error: " << error.what() << std::endl;
+		return 1;
 	}
-
-	// Code for example...
-
-	std::cout << "Commands:\n";
-	io::CommandParser parser;
-	parser.add<io::CreateMap>([](auto command) { printDebug(std::cout, command); })
-		.add<io::SpawnSwordsman>([](auto command) { printDebug(std::cout, command); })
-		.add<io::SpawnHunter>([](auto command) { printDebug(std::cout, command); })
-		.add<io::March>([](auto command) { printDebug(std::cout, command); });
-
-	parser.parse(file);
-
-	std::cout << "\n\nEvents:\n";
-
-	EventLog eventLog;
-
-	eventLog.log(1, io::MapCreated{10, 10});
-	eventLog.log(1, io::UnitSpawned{1, "Swordsman", 0, 0});
-	eventLog.log(1, io::UnitSpawned{2, "Hunter", 9, 0});
-	eventLog.log(1, io::MarchStarted{1, 0, 0, 9, 0});
-	eventLog.log(1, io::MarchStarted{2, 9, 0, 0, 0});
-	eventLog.log(1, io::UnitSpawned{3, "Swordsman", 0, 9});
-	eventLog.log(1, io::MarchStarted{3, 0, 9, 0, 0});
-
-	eventLog.log(2, io::UnitMoved{1, 1, 0});
-	eventLog.log(2, io::UnitMoved{2, 8, 0});
-	eventLog.log(2, io::UnitMoved{3, 0, 8});
-
-	eventLog.log(3, io::UnitMoved{1, 2, 0});
-	eventLog.log(3, io::UnitMoved{2, 7, 0});
-	eventLog.log(3, io::UnitMoved{3, 0, 7});
-
-	eventLog.log(4, io::UnitMoved{1, 3, 0});
-	eventLog.log(4, io::UnitAttacked{2, 1, 5, 0});
-	eventLog.log(4, io::UnitDied{1});
-	eventLog.log(4, io::UnitMoved{3, 0, 6});
-
-	eventLog.log(5, io::UnitMoved{2, 6, 0});
-	eventLog.log(5, io::UnitMoved{3, 0, 5});
-
-	eventLog.log(6, io::UnitMoved{2, 5, 0});
-	eventLog.log(6, io::UnitMoved{3, 0, 4});
-
-	eventLog.log(7, io::UnitAttacked{2, 3, 5, 5});
-	eventLog.log(7, io::UnitMoved{3, 0, 3});
-
-	eventLog.log(8, io::UnitAttacked{2, 3, 5, 0});
-	eventLog.log(8, io::UnitDied{3});
-
-	return 0;
 }

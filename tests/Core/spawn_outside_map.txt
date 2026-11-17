@@ -1,0 +1,4 @@
+CREATE_MAP 5 5
+SPAWN_SWORDSMAN 1 5 0 10 2
+
+// EXPECT-ERROR: Cannot spawn unit 1: cell is outside the map
