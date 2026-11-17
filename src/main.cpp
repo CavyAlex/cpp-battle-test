@@ -8,6 +8,7 @@
 #include <IO/Commands/SpawnSwordsman.hpp>
 #include <IO/System/CommandParser.hpp>
 #include <IO/System/EventLog.hpp>
+#include <charconv>
 #include <cstdint>
 #include <exception>
 #include <fstream>
@@ -25,6 +26,17 @@ namespace
 		uint32_t seed{};
 	};
 
+	uint32_t parseSeed(const std::string& text)
+	{
+		uint32_t seed{};
+		const auto [end, error] = std::from_chars(text.data(), text.data() + text.size(), seed);
+		if (text.empty() || error != std::errc{} || end != text.data() + text.size())
+		{
+			throw std::runtime_error("Invalid --seed value: " + text);
+		}
+		return seed;
+	}
+
 	Options parseOptions(int argc, char** argv)
 	{
 		const std::string usage = "Usage: sw_battle_test <scenario_file> [--seed <number>]";
@@ -34,7 +46,7 @@ namespace
 		}
 		if (argc == 4 && std::string(argv[2]) == "--seed")
 		{
-			return {argv[1], static_cast<uint32_t>(std::stoul(argv[3]))};
+			return {argv[1], parseSeed(argv[3])};
 		}
 		throw std::runtime_error(usage);
 	}

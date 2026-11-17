@@ -1,3 +1,30 @@
+# **Сборка и запуск**
+
+Нужны CMake 3.20+, компилятор с поддержкой C++20 (clang 15+) и bash для сценарных тестов.
+
+```bash
+cmake -S . -B build -DCMAKE_CXX_COMPILER=clang++
+cmake --build build
+./build/sw_battle_test commands_example.txt
+```
+
+Цели атак выбираются случайно. Чтобы бой повторялся от запуска к запуску, задайте seed:
+
+```bash
+./build/sw_battle_test commands_example.txt --seed 42
+```
+
+Тесты:
+
+```bash
+cmake --build build && ctest --test-dir build --output-on-failure
+```
+
+- Сценарии лежат в `tests/**/*.txt`: команды и ожидаемые строки лога в комментариях `// EXPECT:` (или ожидаемая ошибка в `// EXPECT-ERROR:`). Новый файл подхватывается автоматически.
+- C++-тесты лежат в `tests/**/*.cpp` и собираются в `unit_tests`.
+
+Известные недостатки и трактовки задания описаны в [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
+
 # **Цель**
 
 Цель задания — **продемонстрировать навыки проектирования ПО.**

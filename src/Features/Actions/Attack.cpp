@@ -34,6 +34,7 @@ namespace sw::features
 	void damage(core::World& world, const core::Unit& attacker, core::Unit& target, uint32_t amount)
 	{
 		const auto& currentHp = target.getHp();
+		// Не дубль changeHp: проверяем до записи UNIT_ATTACKED в лог
 		if (!currentHp || !target.isAlive())
 		{
 			throw std::logic_error("Unit " + std::to_string(target.getId()) + " cannot take damage");
