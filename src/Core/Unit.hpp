@@ -49,16 +49,14 @@ namespace sw::core
 		// nullopt — статичный юнит
 		const std::optional<Movement>& getMovement() const;
 
-		// HP кончилось или юнит сам ушёл с поля (например, Мина после взрыва).
-		// Мёртвый юнит доигрывает текущий ход, но целью уже не считается.
+		// false — HP кончилось или юнит ушёл с поля
 		bool isAlive() const;
 		void leaveMap();
 
-		// Один ход. Возвращает true, если юнит что-то сделал
+		// true, если юнит что-то сделал
 		virtual bool act(World& world) = 0;
 
-		// Как юнит отвечает на попытку его атаковать: nullopt — атаку не пускает,
-		// иначе дистанция, на которой атака возможна. По умолчанию пускает как есть.
+		// nullopt — атаку не пускает, иначе дистанция атаки по этому юниту
 		virtual std::optional<AttackRange> incomingAttackRange(AttackKind kind, AttackRange range) const;
 
 	protected:
@@ -70,7 +68,6 @@ namespace sw::core
 			std::optional<Movement> movement,
 			bool occupiesCell = true);
 
-		// Ошибки сценария вида «Swordsman 1: strength must be positive» / «Hunter 1: range must be at least 2»
 		void requirePositive(uint32_t value, const char* field) const;
 		void requireAtLeast(uint32_t value, uint32_t min, const char* field) const;
 

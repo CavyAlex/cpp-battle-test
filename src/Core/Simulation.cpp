@@ -10,7 +10,7 @@ namespace sw::core
 		{
 			world.nextTick();
 
-			// Ходят те, кто был на поле в начале хода, включая погибших в этом ходу
+			// Погибшие в этом ходу тоже ходят
 			const auto unitCount = world.getUnits().size();
 			bool anyActed = false;
 			for (size_t i = 0; i < unitCount; ++i)
@@ -18,7 +18,7 @@ namespace sw::core
 				anyActed |= world.getUnits()[i]->act(world);
 			}
 
-			// Если никто не действовал и никого не убрали, мир не изменился — следующий ход будет таким же пустым
+			// Мир не изменился — следующий ход будет пустым
 			const bool anyRemoved = world.removeDead();
 			if (!anyActed && !anyRemoved)
 			{

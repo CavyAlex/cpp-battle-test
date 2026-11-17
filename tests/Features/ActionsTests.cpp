@@ -7,8 +7,6 @@
 using namespace sw;
 using namespace sw::test;
 
-// Общие атаки
-
 TEST(A1_meleeAttackPicksRandomNeighbor)
 {
 	for (const auto& [pick, expectedTarget] : {std::pair{size_t{0}, 2}, std::pair{size_t{1}, 3}})
@@ -41,8 +39,6 @@ TEST(A2_meleeAttackWithoutNeighborsDoesNothing)
 	CHECK(t.events().empty());
 }
 
-// Марш
-
 TEST(S1_noMarchTargetMeansNoStep)
 {
 	TestWorld t;
@@ -74,8 +70,6 @@ TEST(S3_fastUnitStopsAtMarchTarget)
 	CHECK(
 		t.events() == std::vector<std::string>{"[1] UNIT_MOVED unitId=1 x=1 y=0", "[1] MARCH_ENDED unitId=1 x=1 y=0"});
 }
-
-// Урон
 
 TEST(F1_damageAboveHpStopsAtZero)
 {

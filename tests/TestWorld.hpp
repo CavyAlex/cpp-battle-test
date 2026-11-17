@@ -13,7 +13,6 @@
 
 namespace sw::test
 {
-	// Свойства тестового юнита: по умолчанию обычный ходячий юнит с 10 HP
 	struct StubOptions
 	{
 		std::optional<uint32_t> hp = 10;
@@ -22,7 +21,6 @@ namespace sw::test
 		std::function<std::optional<core::AttackRange>(core::AttackKind, core::AttackRange)> incomingAttackRange;
 	};
 
-	// Юнит без собственного поведения: нужен, чтобы проверять Core на юнитах с разными свойствами
 	class StubUnit final : public core::Unit
 	{
 	public:
@@ -46,7 +44,7 @@ namespace sw::test
 		std::function<std::optional<core::AttackRange>(core::AttackKind, core::AttackRange)> _incomingAttackRange;
 	};
 
-	// Мир для теста: события перехватываются из stdout, случайный выбор заменён заглушкой
+	// stdout перехватывается, случайный выбор — заглушка
 	class TestWorld
 	{
 	public:
@@ -77,7 +75,7 @@ namespace sw::test
 			return add(std::make_unique<StubUnit>(id, position, std::move(options)));
 		}
 
-		// Событие UNIT_SPAWNED из лога убирается: тест видит только события проверяемого действия
+		// UNIT_SPAWNED убирается из лога: тест видит только события проверяемого действия
 		template <class TUnit>
 		TUnit& add(std::unique_ptr<TUnit> unit)
 		{
@@ -87,7 +85,6 @@ namespace sw::test
 			return reference;
 		}
 
-		// Строки лога без пробелов в конце
 		std::vector<std::string> events() const
 		{
 			std::vector<std::string> lines;

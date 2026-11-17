@@ -57,8 +57,7 @@ namespace
 			throw std::runtime_error("File not found: " + options.scenarioPath);
 		}
 
-		// Индекс считаем сами, а не через std::uniform_int_distribution: так один seed даёт
-		// одинаковый результат на любой стандартной библиотеке
+		// Не uniform_int_distribution: она по-разному устроена в libc++ и libstdc++
 		std::mt19937 engine(options.seed);
 		EventLog eventLog;
 		core::World world(eventLog, [&engine](size_t n) { return static_cast<size_t>(engine() % n); });
@@ -69,7 +68,6 @@ namespace
 		features::registerUnits(parser, world);
 
 		parser.parse(file);
-		// «CREATE_MAP — эта команда начинает любой сценарий»: пустой сценарий — ошибка, а не пустой лог
 		if (!world.hasMap())
 		{
 			throw std::runtime_error("Scenario has no CREATE_MAP");

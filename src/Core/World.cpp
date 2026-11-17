@@ -112,7 +112,7 @@ namespace sw::core
 		{
 			return false;
 		}
-		// Юнит, который не занимает клетку (Ворон, Мина), может стоять поверх других
+		// Юнит, не занимающий клетку, может стоять поверх других
 		if (!unit.occupiesCell())
 		{
 			return true;
@@ -147,7 +147,7 @@ namespace sw::core
 		std::vector<Unit*> result;
 		for (const auto& unit : _units)
 		{
-			// Без HP урон нанести нельзя — такой юнит не цель, даже если забыл отказать в incomingAttackRange
+			// Без HP урон не нанести
 			if (unit.get() == &attacker || !unit->isAlive() || !unit->getHp())
 			{
 				continue;

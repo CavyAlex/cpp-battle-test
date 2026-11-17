@@ -12,7 +12,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Минимальная версия из требований задания
           - os: ubuntu-22.04
             clang: 15
           - os: ubuntu-24.04

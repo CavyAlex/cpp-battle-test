@@ -23,8 +23,6 @@ namespace
 	}
 }
 
-// Выбор целей
-
 TEST(T1_unitKilledThisTurnIsNotATarget)
 {
 	TestWorld t;
@@ -84,8 +82,6 @@ TEST(T6_unitWithoutHpIsNeverATarget)
 	CHECK(t.world.findTargets(attacker, core::AttackKind::Melee, {1, 1}).empty());
 	CHECK(t.world.findTargets(attacker, core::AttackKind::Ranged, {1, 5}).empty());
 }
-
-// Перемещение и марш
 
 TEST(M1_staticUnitCannotMarch)
 {
@@ -157,8 +153,6 @@ TEST(M7_reachingMarchTargetEndsMarch)
 		t.events() == std::vector<std::string>{"[1] UNIT_MOVED unitId=1 x=1 y=0", "[1] MARCH_ENDED unitId=1 x=1 y=0"});
 	CHECK(!unit.getMovement()->marchTarget);
 }
-
-// Урон и смерть
 
 TEST(D1_unitWithoutHpCannotChangeHp)
 {

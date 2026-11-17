@@ -3,8 +3,7 @@
 #include <string>
 #include <vector>
 
-// Минимальный тестовый каркас без сторонних библиотек.
-// CHECK работает и в Release: в отличие от assert, его не отключает NDEBUG.
+// CHECK, в отличие от assert, работает и с NDEBUG
 namespace sw::test
 {
 	struct TestCase

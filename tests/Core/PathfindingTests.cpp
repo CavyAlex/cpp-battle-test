@@ -7,7 +7,6 @@ using namespace sw::test;
 
 namespace
 {
-	// Следующий шаг юнита 1 из from к to на карте width×height, где walls заняты другими юнитами
 	std::optional<core::Position> stepOn(
 		uint32_t width,
 		uint32_t height,
@@ -26,8 +25,6 @@ namespace
 		return core::nextStep(t.world, unit, to);
 	}
 }
-
-// Выбор следующей клетки
 
 TEST(P1_straightPathPreferredAmongEqualOnes)
 {
