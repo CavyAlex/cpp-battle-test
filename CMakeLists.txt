@@ -4,7 +4,8 @@ project(sw_battle_test LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-add_compile_options(-Wall -Wextra -Wpedantic)
+# Именованные инициализаторы с частью полей — обычный приём в проекте, clang 18+ без флага на них ругается
+add_compile_options(-Wall -Wextra -Wpedantic -Wno-missing-field-initializers)
 
 file(GLOB_RECURSE LIBRARY_SOURCES CONFIGURE_DEPENDS src/Core/*.?pp src/Features/*.?pp src/IO/*.?pp)
 add_library(sw_battle STATIC ${LIBRARY_SOURCES})
@@ -27,7 +28,5 @@ endforeach()
 file(GLOB_RECURSE UNIT_TEST_SOURCES CONFIGURE_DEPENDS tests/*.cpp tests/*.hpp)
 add_executable(unit_tests ${UNIT_TEST_SOURCES})
 target_include_directories(unit_tests PRIVATE tests/)
-# StubOptions в тестах задаются частично — clang 18+ предупреждает об этом
-target_compile_options(unit_tests PRIVATE -Wno-missing-field-initializers)
 target_link_libraries(unit_tests PRIVATE sw_battle)
 add_test(NAME unit_tests COMMAND unit_tests)

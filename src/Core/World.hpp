@@ -16,6 +16,7 @@ namespace sw::core
 	// Индекс из [0, n); в тестах подменяется заглушкой
 	using RandomPick = std::function<size_t(size_t n)>;
 
+	// Ошибки сценария — std::runtime_error, нарушение правил мира из кода Features — std::logic_error
 	class World
 	{
 	public:
